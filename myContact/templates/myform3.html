@@ -1,6 +1,7 @@
+{% load crispy_forms_tags %}
 <form action="" method="post">
     {% csrf_token %}
-    {{mycontactform3.as_p}}
+    {{mycontactform3|crispy}}
     <input type="submit" value="envoyer">
 
 </form>

@@ -1,9 +1,10 @@
 from http.client import HTTPResponse
 
-from django.http import HttpResponse, request
-from django.shortcuts import render
+from django.core.mail import send_mail
+from django.http import BadHeaderError, HttpResponse, request
+from django.shortcuts import redirect, render
 
-from myContact.forms import contactform2, contactform3
+from myContact.forms import contactform, contactform2, contactform3
 from myContact.models import Contact
 
 
@@ -41,3 +42,23 @@ def controleform3(request):
     else:
         form=contactform3()
     return render(request,"myform3.html",{'mycontactform3':form})
+
+def contactView(request):
+    if request.method == 'GET': form = contactform()
+    else: 
+        form = contactform(request.POST) 
+        if form.is_valid(): 
+            subject = form.cleaned_data['subject']
+            form_email = form.cleaned_data['form_email']
+            message = form.cleaned_data['message']
+            try:
+                send_mail(subject, message, form_email, ['sahbisouloi@gmail.com'])
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+        return redirect('success')
+    return render(request, "email.html", {'form': form})
+
+def successView(request):
+    return HttpResponse('Success! Thank you for your message.')
+        
+        

@@ -16,3 +16,8 @@ class contactform3(ModelForm):
     class Meta:
         model = Contact
         fields = ['firstname', 'lastname', 'email', 'message']
+
+class contactform(forms.Form):
+     form_email = forms.EmailField(required=True)
+     subject = forms.CharField(required=True)
+     message = forms.CharField(widget=forms.Textarea, required=True)
